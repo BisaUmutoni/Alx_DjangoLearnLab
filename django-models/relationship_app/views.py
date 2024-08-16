@@ -7,10 +7,12 @@ from .models import Library
 # Create your views here.
 def book_list(request):
     books = Book.objects.all()
-    response_message = '\n'.join([f"{book.title} by {book.author.name}" for book in books])
-    return HttpResponse (response_message, content_type = "text/plain")
+    return render(request, 'list_books.html', {'books': books})
+
 
 class LibraryDetailView(DetailView):
     model = Library
     template_name = 'library_detail.html'
     content_object_name = 'library'
+
+
