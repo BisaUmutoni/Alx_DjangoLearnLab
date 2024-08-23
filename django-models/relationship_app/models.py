@@ -1,4 +1,9 @@
 from django.db import models
+from django.shortcuts import render, redirect
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
+
 
 # Definition for Author Model
 class Author(models.Model):
@@ -32,3 +37,7 @@ class Librarian(models.Model):
 
     def __str__(self):
         return self.name
+    
+
+# Definition view for login
+
