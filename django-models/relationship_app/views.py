@@ -19,7 +19,7 @@ class LibraryDetailView(DetailView):
     template_name = 'relationship_app/library_detail.html'
     context_object_name = 'library'
 
-def lLoginView(request):
+def LoginView(request):
     if request.method == "POST":
         username = request.POST['username']
         password = request.POST['password']
@@ -35,17 +35,22 @@ def LogoutView(request):
     logout(request)
     return redirect('login')  
 
-def registerView(request):
-    if request.method == "POST":
-        username = request.POST['username']
-        password = request.POST['password']
-        if User.objects.filter(username=username).exists():
-            messages.error(request, 'Username already exists.')
-        else:
-            user = User.objects.create_user(username=username, password=password)
-            login(request, user)  
-            return redirect('home') 
-    return render(request, 'relationship_app/register.html')
-
 def homeView(request):
     return render(request, 'relationship_app/home.html')
+
+
+def registerView(request):
+    if request.method == "POST":
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)  # Log the user in after successful registration
+            return redirect('home')
+        else:
+            for error in form.errors.values():
+                messages.error(request, error)
+    else:
+        form = UserCreationForm()
+    return render(request, 'relationship_app/register.html', {'form': form})
+
+
