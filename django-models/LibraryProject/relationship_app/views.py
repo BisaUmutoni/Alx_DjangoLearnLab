@@ -19,7 +19,7 @@ class LibraryDetailView(DetailView):
     template_name = 'relationship_app/library_detail.html'
     context_object_name = 'library'
 
-def login_view(request):
+def lLoginView(request):
     if request.method == "POST":
         username = request.POST['username']
         password = request.POST['password']
@@ -31,11 +31,11 @@ def login_view(request):
             messages.error(request, 'Invalid username or password.')
     return render(request, 'relationship_app/login.html')
 
-def logout_view(request):
+def LogoutView(request):
     logout(request)
     return redirect('login')  
 
-def register_view(request):
+def registerView(request):
     if request.method == "POST":
         username = request.POST['username']
         password = request.POST['password']
@@ -47,5 +47,5 @@ def register_view(request):
             return redirect('home') 
     return render(request, 'relationship_app/register.html')
 
-def home_view(request):
+def homeView(request):
     return render(request, 'relationship_app/home.html')
