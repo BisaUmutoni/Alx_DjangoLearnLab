@@ -1,7 +1,10 @@
 from django.shortcuts import render, redirect
 from .models import Book
 from .models import Library
+from django.db import models
 from django.views.generic.detail import DetailView
+
+from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.models import User
@@ -38,7 +41,7 @@ def register_view(request):
             messages.error(request, 'Username already exists.')
         else:
             user = User.objects.create_user(username=username, password=password)
-            login(request, user)  # Automatically log the user in after registration.
+            login(request, user)  
             return redirect('home') 
     return render(request, 'relationship_app/register.html')
 
