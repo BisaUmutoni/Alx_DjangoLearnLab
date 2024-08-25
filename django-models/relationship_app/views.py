@@ -63,7 +63,7 @@ from django.shortcuts import render, redirect
 def admin_check(user):
     return user.is_superuser and user.userprofile.role == 'Admin'
 @user_passes_test(admin_check)
-def admin_view(request):
+def Admin(request):
     return render(request, 'relationship_app/admin_view.html')
 
 # Check for Librarian role
