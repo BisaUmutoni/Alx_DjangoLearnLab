@@ -37,14 +37,13 @@ class Librarian(models.Model):
 
     def __str__(self):
         return self.name
-    
 
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     password = models.CharField(max_length= 200)
     def __str__(self):
-        return self.user.username
+        return f'{self.user.username} Profile'
 
 class UserRole(models.Model):
     ROLE_CHOICES = (
