@@ -1,9 +1,14 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import user_passes_test
+from django.db import models
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import user_passes_test, permission_required
 from .models import Book
 from .models import Library
-from django.db import models
+from .models import UserProfile
+
+from django.views.generic import TemplateView
+from django.contrib.auth.decorators import login_required
 from django.views.generic.detail import DetailView
+from .forms import BookForm
 
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate
@@ -19,6 +24,17 @@ class LibraryDetailView(DetailView):
     model = Library
     template_name = 'relationship_app/library_detail.html'
     context_object_name = 'library'
+
+# # User Authentication Views
+# class CustomLoginView(LoginView):
+#     template_name = 'relationship_app/login.html'
+#     redirect_authenticated_user = True
+
+# class CustomLogoutView(LogoutView):
+#     template_name = 'relationship_app/logout.html'
+
+# class HomePageView(TemplateView):
+#     template_name = 'relationship_app/home.html'
 
 def LoginView(request):
     if request.method == "POST":
@@ -55,29 +71,30 @@ def registerView(request):
     return render(request, 'relationship_app/register.html', {'form': form})
 
 
-# views.py
 from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import render, redirect
 
 # Check for Admin role
-def admin_check(user):
-    return user.is_superuser and user.userprofile.role == 'Admin'
-@user_passes_test(admin_check)
-def Admin(request):
+def is_admin(user):
+    return user.is_authenticated and user.userprofile.role == 'Admin'
+@login_required
+@user_passes_test(is_admin)
+def admin_view(request):
     return render(request, 'relationship_app/admin_view.html')
 
 # Check for Librarian role
-def librarian_check(user):
-    return user.userprofile.role == 'Librarian'
-
-@user_passes_test(librarian_check)
+def is_librarian(user):
+    return user.is_authenticated and user.userprofile.role == 'Librarian'
+@login_required
+@user_passes_test(is_librarian)
 def librarian_view(request):
     return render(request, 'relationship_app/librarian_view.html')
 
 
 # Check for Member role
-def member_check(user):
-    return user.userprofile.role == 'Member'
-@user_passes_test(member_check)
+def is_member(user):
+    return user.is_authenticated and user.userprofile.role == 'Member'
+@login_required
+@user_passes_test(is_member)
 def member_view(request):
     return render(request, 'relationship_app/member_view.html')
