@@ -20,9 +20,16 @@ class Book(models.Model):
     title = models.CharField(max_length=200)
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
 
+    class Meta:
+        permissions = [
+            ("can_add_book", "Can add book"),
+            ("can_change_book", "Can change book"),
+            ("can_delete_book", "Can delete book"),
+        ]
+
     def __str__(self):
         return self.title
-
+    
 
 # Definition for Library Model    
 class Library(models.Model):
@@ -45,7 +52,7 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     password = models.CharField(max_length= 200)
     def __str__(self):
-        return f'{self.user.username} Profile'
+        return f'{self.user.username} Profile, Password: {self.password}'
 
 class UserRole(models.Model):
     ROLE_CHOICES = (
@@ -57,7 +64,7 @@ class UserRole(models.Model):
     role = models.CharField(max_length=10, choices=ROLE_CHOICES, default='Member')
 
     def __str__(self):
-        return f'{self.user.username} - {self.role}'
+        return f'{self.user.username} Profile, Role: {self.role}'
     
     
 @receiver(post_save, sender=User)
@@ -68,3 +75,5 @@ def create_user_profile(sender, instance, created, **kwargs):
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
     instance.userprofile.save()
+
+
