@@ -61,24 +61,23 @@ from django.shortcuts import render, redirect
 
 # Check for Admin role
 def admin_check(user):
-    return user.is_authenticated and user.userprofile.role == 'Admin'
+    return user.is_superuser and user.userprofile.role == 'Admin'
+@user_passes_test(admin_check)
+def admin_view(request):
+    return render(request, 'relationship_app/admin_view.html')
 
 # Check for Librarian role
 def librarian_check(user):
     return user.userprofile.role == 'Librarian'
 
-# Check for Member role
-def member_check(user):
-    return user.userprofile.role == 'Member'
-
-@user_passes_test(admin_check)
-def admin_view(request):
-    return render(request, 'relationship_app/admin_view.html')
-
 @user_passes_test(librarian_check)
 def librarian_view(request):
     return render(request, 'relationship_app/librarian_view.html')
 
+
+# Check for Member role
+def member_check(user):
+    return user.userprofile.role == 'Member'
 @user_passes_test(member_check)
 def member_view(request):
     return render(request, 'relationship_app/member_view.html')
