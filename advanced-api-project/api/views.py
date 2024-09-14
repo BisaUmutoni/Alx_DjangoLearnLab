@@ -6,7 +6,7 @@ from .models import Book
 from .serializers import BookSerializer
 from rest_framework import generics, filters
 
-from django_filter import rest_framework
+from django_filters import rest_framework
 
 from rest_framework import DjangoFilterBackend
 from .models import Book
