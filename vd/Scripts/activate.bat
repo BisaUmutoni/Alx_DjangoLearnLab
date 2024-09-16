@@ -8,7 +8,7 @@ if defined _OLD_CODEPAGE (
     "%SystemRoot%\System32\chcp.com" 65001 > nul
 )
 
-set VIRTUAL_ENV=C:\Users\Euro Scholars\OneDrive\Desktop\KWIGA\ALX\BE\Alx_DjangoLearnLab\advanced_api_project\vd
+set VIRTUAL_ENV=C:\Users\Euro Scholars\OneDrive\Desktop\KWIGA\ALX\BE\Alx_DjangoLearnLab\vd
 
 if not defined PROMPT set PROMPT=$P$G
 
