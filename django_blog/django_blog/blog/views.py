@@ -55,3 +55,50 @@ class HomePageView(TemplateView):
             user.save()
             messages.success(request, 'Profile updated successfully.')
         return render(request, 'profile.html', {'user': request.user})
+
+
+from django.urls import reverse_lazy
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from .models import Post
+
+class ListView(ListView):
+    model = Post
+    template_name = 'blog/list.html'
+    context_object_name = 'posts'
+    ordering = ['-published_date']
+
+class DetailView(DetailView):
+    model = Post
+    template_name = 'blog/detail.html'
+
+class CreateView(LoginRequiredMixin, CreateView):
+    model = Post
+    fields = ['title', 'content']
+    template_name = 'blog/form.html'
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+
+class UpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Post
+    fields = ['title', 'content']
+    template_name = 'blog/form.html'
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+
+    def test_func(self):
+        post = self.get_object()
+        return self.request.user == post.author
+
+class DeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Post
+    template_name = 'blog/delete.html'
+    success_url = reverse_lazy('list')
+
+    def test_func(self):
+        post = self.get_object()
+        return self.request.user == post.author

@@ -17,6 +17,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from .views import CustomLoginView, CustomLogoutView, HomePageView
+from .views import ListView, DetailView, CreateView, UpdateView, DeleteView
+
 
 urlpatterns = [
     path('login/', CustomLoginView.as_view(), name='login'),
@@ -24,6 +26,12 @@ urlpatterns = [
     path('register/', HomePageView.register, name='register'),
     path('profile/', HomePageView.profile, name='profile'),
     path('', HomePageView.as_view(template_name='blog/home.html'), name='home'),
+
+    path('', ListView.as_view(), name='post-list'),
+    path('post/<int:pk>/', DetailView.as_view(), name='post-detail'),
+    path('post/new/', CreateView.as_view(), name='post-create'),
+    path('post/<int:pk>/edit/', UpdateView.as_view(), name='post-update'),
+    path('post/<int:pk>/delete/', DeleteView.as_view(), name='post-delete'),
 ]
 
 
