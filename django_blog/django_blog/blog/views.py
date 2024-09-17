@@ -4,14 +4,18 @@ from django.contrib.auth.decorators import login_required
 from .forms import CustomUserCreationForm
 from django.contrib.auth.models import User
 from django.contrib import messages
+from .models import *
 from django.contrib.auth.views import LoginView, LogoutView
+from django.views.generic import TemplateView
+
 
 class CustomLoginView(LoginView):
     template_name = 'blog/login.html'  # Specify the template for the login page
 
 class CustomLogoutView(LogoutView):
     template_name = 'blog/logout.html'
-    
+
+class HomePageView(TemplateView):
     def register(request):
         if request.method == 'POST':
             form = CustomUserCreationForm(request.POST)
@@ -24,7 +28,7 @@ class CustomLogoutView(LogoutView):
         else:
             form = CustomUserCreationForm()
             return render(request, 'register.html', {'form': form})
-        
+            # return HttpResponse redirect
     
     def login_view(request):
         if request.method == 'POST':
