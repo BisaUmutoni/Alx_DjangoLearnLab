@@ -12,10 +12,9 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         user = User(**validated_data)
-        user.set_password(validated_data['password'])
+        user.set_password(validated_data['password'])  # Hash the password
         user.save()
-        # Create a token for the new user
-        Token.objects.create(user=user)
+        Token.objects.create(user=user)  # Create a token for the new user
         return user
 
 class UserLoginSerializer(serializers.Serializer):
