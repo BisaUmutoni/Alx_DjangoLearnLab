@@ -1,9 +1,0 @@
-<h2>Posts tagged with "{{ tag.name }}"</h2>
-{% for post in posts %}
-    <div>
-        <h3><a href="{% url 'post_detail' post.id %}">{{ post.title }}</a></h3>
-        <p>{{ post.content|slice:":200" }}...</p>
-    </div>
-{% empty %}
-    <p>No posts found for this tag.</p>
-{% endfor %}

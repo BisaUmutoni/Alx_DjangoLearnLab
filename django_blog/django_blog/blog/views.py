@@ -156,7 +156,7 @@ def search_posts(request):
     return render(request, 'blog/search_results.html', {'results': results, 'query': query})
 
 
-def posts_by_tag(request, tag_slug):
+def PostByTagListView(request, tag_slug):
     tag = get_object_or_404(Tag, slug=tag_slug)
     posts = Post.objects.filter(tags__in=[tag])
     return render(request, 'blog/posts_by_tag.html', {'tag': tag, 'posts': posts})

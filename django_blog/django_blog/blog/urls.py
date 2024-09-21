@@ -19,6 +19,7 @@ from django.urls import path, include
 from . import views
 from .views import CustomLoginView, CustomLogoutView, HomePageView
 from .views import ListView, DetailView, CreateView, UpdateView, DeleteView
+from .views import PostByTagListView
 
 
 urlpatterns = [
@@ -39,9 +40,10 @@ urlpatterns = [
     path('comment/<int:pk>/delete/', views.CommentDeleteView, name='delete_comment'),
 
     path('search/', views.search_posts, name='search_posts'),
-    path('tag/<slug:tag_slug>/', views.posts_by_tag, name='posts_by_tag'),
+    path('tags/<slug:tag_slug>/', PostByTagListView.as_view(), name='posts_by_tag'),
 
 ]
+
 
 
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
