@@ -9,7 +9,9 @@ from django.contrib.auth.views import LoginView, LogoutView
 from django.views.generic import TemplateView
 from .models import Post, Comment
 from .forms import CommentForm
-
+from taggit.forms import TagWidget
+from django.db.models import Q
+from taggit.models import Tag
 
 class CustomLoginView(LoginView):
     template_name = 'blog/login.html'  # Specify the template for the login page
@@ -141,3 +143,20 @@ def CommentDeleteView(request, comment_id):
     if request.user == comment.author:
         comment.delete()
     return redirect('post_detail', post_id=comment.post.id)
+
+def search_posts(request):
+    query = request.GET.get('q')
+    if query:
+        results = Post.objects.filter(
+            Q(title__icontains=query) | Q(content__icontains=query) | Q(tags__name__icontains=query)
+        ).distinct()
+    else:
+        results = Post.objects.none()
+
+    return render(request, 'blog/search_results.html', {'results': results, 'query': query})
+
+
+def posts_by_tag(request, tag_slug):
+    tag = get_object_or_404(Tag, slug=tag_slug)
+    posts = Post.objects.filter(tags__in=[tag])
+    return render(request, 'blog/posts_by_tag.html', {'tag': tag, 'posts': posts})
