@@ -64,13 +64,13 @@ from .models import Post
 
 class ListView(ListView):
     model = Post
-    template_name = 'blog/list.html'
+    template_name = 'blog/post_list.html'
     context_object_name = 'posts'
     ordering = ['-published_date']
 
 class DetailView(DetailView):
     model = Post
-    template_name = 'blog/detail.html'
+    template_name = 'blog/post_detail.html'
 
 class CreateView(LoginRequiredMixin, CreateView):
     model = Post
@@ -84,7 +84,7 @@ class CreateView(LoginRequiredMixin, CreateView):
 class UpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Post
     fields = ['title', 'content']
-    template_name = 'blog/form.html'
+    template_name = 'blog/post_form.html'
 
     def form_valid(self, form):
         form.instance.author = self.request.user
@@ -96,7 +96,7 @@ class UpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
 class DeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Post
-    template_name = 'blog/delete.html'
+    template_name = 'blog/post_delete.html'
     success_url = reverse_lazy('list')
 
     def test_func(self):

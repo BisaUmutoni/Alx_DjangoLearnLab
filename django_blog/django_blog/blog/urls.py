@@ -27,11 +27,11 @@ urlpatterns = [
     path('profile/', HomePageView.profile, name='profile'),
     path('', HomePageView.as_view(template_name='blog/home.html'), name='home'),
 
-    path('', ListView.as_view(), name='post-list'),
-    path('post/<int:pk>/', DetailView.as_view(), name='post-detail'),
-    path('post/new/', CreateView.as_view(), name='post-create'),
-    path('post/<int:pk>/update/', UpdateView.as_view(), name='post-update'),
-    path('post/<int:pk>/delete/', DeleteView.as_view(), name='post-delete'),
+    path('posts/', ListView.as_view(), name='post_list'),
+    path('post/<int:pk>/', DetailView.as_view(), name='post_detail'),
+    path('post/new/', CreateView.as_view(), name='post_create'),
+    path('post/<int:pk>/update/', UpdateView.as_view(), name='post_update'),
+    path('post/<int:pk>/delete/', DeleteView.as_view(), name='post_delete'),
 ]
 
 
