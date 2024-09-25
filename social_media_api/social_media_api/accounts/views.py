@@ -2,7 +2,7 @@ from django.shortcuts import render
 
 from rest_framework import generics
 from .models import CustomUser
-from .serializers import UserSerializer
+from .serializers import UserLoginSerializer
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
@@ -11,7 +11,7 @@ from django.contrib.auth import authenticate
 
 class RegisterView(generics.CreateAPIView):
     queryset = CustomUser.objects.all()
-    serializer_class = UserSerializer
+    serializer_class = UserLoginSerializer
     permission_classes = [AllowAny]
 
     def perform_create(self, serializer):

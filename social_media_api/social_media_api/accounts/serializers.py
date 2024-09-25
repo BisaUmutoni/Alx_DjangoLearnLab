@@ -6,7 +6,7 @@ User = get_user_model().objects.create_user
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
     class Meta:
-        model = get_user_model().objects.create_user
+        model = User
         fields = ['username', 'email', 'password', 'bio', 'profile_picture']
         extra_kwargs = {'password': {'write_only': True}}
 
