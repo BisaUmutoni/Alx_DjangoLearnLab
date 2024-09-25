@@ -52,7 +52,7 @@ class UserViewSet(viewsets.ModelViewSet):
         request.user.following.remove(user_to_unfollow)
         return Response({"detail": "Unfollowed."})
 
-class FollowUserView(generics.GenericAPIView):
+class FollowViewSet('', generics.GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, pk):
