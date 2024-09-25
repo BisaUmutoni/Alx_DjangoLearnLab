@@ -6,6 +6,10 @@ from .serializers import PostSerializer, CommentSerializer
 
 from rest_framework import filters
 
+from rest_framework import generics
+from .models import Post
+from .serializers import PostSerializer
+
 class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
@@ -29,3 +33,9 @@ class CommentViewSet(viewsets.ModelViewSet):
         if self.request.user != serializer.instance.author:
             raise permissions.PermissionDenied("You do not have permission to edit this comment.")
         serializer.save()
+class FeedView(generics.ListAPIView):
+    serializer_class = PostSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+        return Post.objects.filter(author__in=user.following.all()).order_by('-created_at')
