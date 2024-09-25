@@ -53,3 +53,19 @@ class UserViewSet(viewsets.ModelViewSet):
         user_to_unfollow = self.get_object()
         request.user.following.remove(user_to_unfollow)
         return Response({"detail": "Unfollowed."})
+
+class FollowUserView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, pk):
+        user_to_follow = CustomUser.objects.get(pk=pk)
+        request.user.following.add(user_to_follow)
+        return Response({"detail": "Now following."})
+
+class UnfollowUserView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, pk):
+        user_to_unfollow = CustomUser.objects.get(pk=pk)
+        request.user.following.remove(user_to_unfollow)
+        return Response({"detail": "Unfollowed."})
