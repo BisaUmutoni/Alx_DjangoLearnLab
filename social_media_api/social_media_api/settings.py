@@ -75,7 +75,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'social_media_api.wsgi.application'
 
 AUTH_USER_MODEL = 'accounts.CustomUser'
-AUTH_USER_MODEL = 'posts.CustomUser'
+
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
