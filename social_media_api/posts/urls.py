@@ -7,12 +7,14 @@ from .views import UserViewSet
 router = DefaultRouter()
 router.register(r'posts', PostViewSet)
 router.register(r'comments', CommentViewSet)
+from .views import FeedView
 
 urlpatterns = [
     path('', include(router.urls)),
     path('users/', UserViewSet.as_view({'get': 'list'}), name='user-list'),
     path('users/<int:pk>/follow/', UserViewSet.as_view({'post': 'follow_user'}), name='follow-user'),
     path('users/<int:pk>/unfollow/', UserViewSet.as_view({'post': 'unfollow_user'}), name='unfollow-user'),
+    path('feed/', FeedView.as_view(), name='feed'),
     path('feed/', FeedView.as_view(), name='feed'),
 
 ]   
