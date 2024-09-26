@@ -73,7 +73,7 @@ def like_post(request, pk):
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])
 def unlike_post(request, pk):
-    post = get_object_or_404(Post, pk=pk)  # Get the post or return 404
+    post = generics.get_object_or_404(Post, pk=pk)  # Get the post or return 404
     try:
         like = Like.objects.get(user=request.user, post=post)
         like.delete()
