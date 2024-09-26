@@ -23,10 +23,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-)%m2!v$5@j(9mt93yqc9f2)n=(5pqv4_@mu1_m3p*lmocsqv6l'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ['yourdomain.com', 'yourapp.herokuapp.com', 'IP_ADDRESS']
 
 # Application definition
 
@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'posts',
+    'notifications',
 
 ]
 
@@ -76,18 +77,27 @@ WSGI_APPLICATION = 'social_media_api.wsgi.application'
 
 AUTH_USER_MODEL = 'accounts.CustomUser'
 
-AUTH_USER_MODEL = 'posts.Post'
+# AUTH_USER_MODEL = 'posts.Post'
+
 
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    "default": {
+        "ENGINE": "django.db.backends.mysql",
+        "NAME":"djangodb",
+        "USER":"root",
+        "PASSWORD":"Maralba16!MYSQL",
+        "HOST":"localhost",
+        "PORT":"3306",
     }
 }
+DEFAULT_FILE_STORAGE = 'storages.backends.s3.S3Boto3Storage'
+AWS_ACCESS_KEY_ID = 'your_access_key'
+AWS_SECRET_ACCESS_KEY = 'your_secret_key'
+AWS_STORAGE_BUCKET_NAME = 'your_bucket_name'
 
 
 # Password validation
@@ -125,7 +135,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = 'static/'
-
+STATIC_ROOT = ''
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
@@ -136,3 +146,8 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 10,
 }
 
+
+SECURE_BROWSER_XSS_FILTER = True
+X_FRAME_OPTIONS = 'DENY'
+SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_SSL_REDIRECT = True  

@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Notification
+from notifications.models import Notification
 
 from .models import Post, Comment, Like
 from .serializers import PostSerializer, CommentSerializer
@@ -58,7 +58,6 @@ def like_post(request, pk):
     like, created = Like.objects.get_or_create(user=request.user, post=post)
 
     if created:
-        # Create a notification for the post owner
         Notification.objects.create(
             recipient=post.user,
             actor=request.user,

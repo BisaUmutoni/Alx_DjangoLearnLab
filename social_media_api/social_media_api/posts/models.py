@@ -3,19 +3,22 @@ from django.contrib.auth.models import User
 from django.contrib.auth.models import AbstractUser
 from django.conf import settings
 
+
 class Post (models.Model):
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    # REQUIRED_FIELDS = ('author',)
 
     def __str__(self) -> str:
         return self.title
 
 class Comment (models.Model):
     post = models.ForeignKey(Post, related_name='comments',on_delete=models.CASCADE)
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
