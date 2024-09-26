@@ -3,6 +3,7 @@ from django.test import TestCase
 from rest_framework import status
 from rest_framework import reverse
 from rest_framework import APIClient
+from rest_framework.test import APITestCase
 
 from .models import Post, Comment
 from django.contrib.auth.models import User
@@ -81,3 +82,16 @@ class PostCommentTests(TestCase):
         
         response = self.client.delete(reverse('comment-detail', args=[comment.id]))
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+
+
+class LikeTests(APITestCase):
+    def test_like_post(self):
+        self.client.login(username='testuser', password='password')
+        response = self.client.post(reverse('like-post', args=[1]))
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_unlike_post(self):
+        self.client.login(username='testuser', password='password')
+        response = self.client.delete(reverse('unlike-post', args=[1]))
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)

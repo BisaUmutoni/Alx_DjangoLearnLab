@@ -23,9 +23,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-)%m2!v$5@j(9mt93yqc9f2)n=(5pqv4_@mu1_m3p*lmocsqv6l'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['yourdomain.com', 'yourapp.herokuapp.com', 'IP_ADDRESS']
 
 
 # Application definition
@@ -133,3 +134,8 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 10,
 }
 
+
+SECURE_BROWSER_XSS_FILTER = True
+X_FRAME_OPTIONS = 'DENY'
+SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_SSL_REDIRECT = True  
