@@ -8,8 +8,12 @@ from rest_framework.response import Response
 
 from rest_framework import filters
 from rest_framework import generics
-
 from rest_framework import status
+from django.shortcuts import get_object_or_404
+
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+from django.contrib.contenttypes.models import ContentType
 
 
 class PostViewSet(viewsets.ModelViewSet):
@@ -47,30 +51,33 @@ class FeedView(generics.ListAPIView):
 class LikeViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
-    def like_post(self,request,pk):
-        post = Post.objects.get(id=pk)
-        like, created = Like.objects.get_or_create(user=request.user, post=post)
-        
-        if created:
-            self.create_notification(request.user, post)
-            return Response({"message": "Post liked."}, status=status.HTTP_201_CREATED)
-        return Response({"message": "You have already liked this post."}, status=status.HTTP_400_BAD_REQUEST)
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def like_post(request, pk):
+    post = get_object_or_404(Post, pk=pk)  # Get the post or return 404
+    like, created = Like.objects.get_or_create(user=request.user, post=post)
 
-    def unlike_post(self, request, pk):
-        post = Post.objects.get(id=pk)
-        try:
-            like = Like.objects.get(user=request.user, post=post)
-            like.delete()
-            return Response({"message": "Post unliked."}, status=status.HTTP_204_NO_CONTENT)
-        except Like.DoesNotExist:
-            return Response({"message": "You have not liked this post."}, status=status.HTTP_400_BAD_REQUEST)
-
-    def create_notification(self, user, post):
-        notification = Notification(
-            recipient=post.author, 
-            actor=user, 
-            verb="liked your post", 
-            #target_content_type=ContentType.objects.get_for_model(post),
+    if created:
+        # Create a notification for the post owner
+        Notification.objects.create(
+            recipient=post.user,
+            actor=request.user,
+            verb='liked your post',
+            target_content_type=ContentType.objects.get_for_model(Post),
             target_object_id=post.id
         )
-        notification.save()
+        return Response({'status': 'liked'}, status=status.HTTP_201_CREATED)
+    else:
+        return Response({'status': 'already liked'}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def unlike_post(request, pk):
+    post = get_object_or_404(Post, pk=pk)  # Get the post or return 404
+    try:
+        like = Like.objects.get(user=request.user, post=post)
+        like.delete()
+        return Response({'status': 'unliked'}, status=status.HTTP_204_NO_CONTENT)
+    except Like.DoesNotExist:
+        return Response({'status': 'not liked yet'}, status=status.HTTP_400_BAD_REQUEST)
+    
